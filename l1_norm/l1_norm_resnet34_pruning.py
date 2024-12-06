@@ -9,7 +9,7 @@ import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 from torchvision import datasets, transforms
 
-from resnet import resnet34
+from ..resnet import resnet34
 
 
 # Prune settings
