@@ -22,7 +22,7 @@ parser.add_argument('--data', type=str, default='/scratch/zhuangl/datasets/image
                     help='Path to imagenet validation data')
 parser.add_argument('--test-batch-size', type=int, default=64, metavar='N',
                     help='input batch size for testing (default: 64)')
-parser.add_argument('--no-cuda', action='store_true', default=False,
+parser.add_argument('--no_cuda', action='store_true', default=False,
                     help='disables CUDA training')
 parser.add_argument('--print-freq', '-p', default=10, type=int,
                     metavar='N', help='print frequency (default: 10)')
@@ -134,13 +134,13 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 skip = {
-    'A': [3, 9, 15, 21, 27, 33, 39, 45, 51, 57, 63],  # Adjusted for ResNet-50
-    'B': [3, 9, 15, 21, 27, 33, 39, 45, 51, 57, 63],
+    'A': [2, 11, 20, 23, 38, 41, 44, 47],  # Adjusted for ResNet-50
+    'B': [2, 11, 20, 23, 38, 41, 44, 47],
 }
 
 prune_prob = {
-    'A': [0.3, 0.3, 0.3, 0.3, 0.0],  # Updated for additional stages
-    'B': [0.5, 0.6, 0.4, 0.4, 0.0],
+    'A': [0.3, 0.3, 0.3, 0.0],  # Updated for additional stages
+    'B': [0.5, 0.6, 0.4, 0.0],
 }
 
 layer_id = 1
@@ -158,16 +158,14 @@ for m in model.modules():
             layer_id += 1
             continue
         if layer_id % 2 == 0:
-            if layer_id <= 12:
+            if layer_id <= 9:
                 stage = 0
-            elif layer_id <= 24:
+            elif layer_id <= 21:
                 stage = 1
-            elif layer_id <= 36:
+            elif layer_id <= 39:
                 stage = 2
-            elif layer_id <= 48:
-                stage = 3
             else:
-                stage = 4
+                stage = 3
             prune_prob_stage = prune_prob[args.v][stage]
             weight_copy = m.weight.data.abs().clone().cpu().numpy()
             L1_norm = np.sum(weight_copy, axis=(1, 2, 3))
