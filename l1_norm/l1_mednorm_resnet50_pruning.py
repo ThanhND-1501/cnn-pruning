@@ -157,7 +157,7 @@ for m in model.modules():
             cfg.append(out_channels)
             layer_id += 1
             continue
-        if layer_id % 2 == 0:
+        if layer_id % 3 == 2:
             if layer_id <= 9:
                 stage = 0
             elif layer_id <= 21:
@@ -184,7 +184,7 @@ for m in model.modules():
             continue
         layer_id += 1
 
-assert len(cfg) == 23, "Length of cfg variable is not correct for ResNet-50."
+assert len(cfg) == 16, "Length of cfg variable is not correct for ResNet-50."
 
 # Create the pruned ResNet-50 model
 newmodel = resnet50(cfg=cfg)
