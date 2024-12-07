@@ -2,6 +2,7 @@ import argparse
 import numpy as np
 import os
 import time
+import sys
 
 import torch
 import torch.nn as nn
@@ -9,6 +10,9 @@ import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 from torchvision import datasets, transforms
 
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
 from resnet import resnet34
 
 
@@ -35,7 +39,7 @@ args.cuda = not args.no_cuda and torch.cuda.is_available()
 if not os.path.exists(args.save):
     os.makedirs(args.save)
 
-model = resnet34(pretrained=True)
+model = resnet34(pretrained=True, low_dim=1000)
 model = torch.nn.DataParallel(model).cuda()
 cudnn.benchmark = True
 
